@@ -1,25 +1,27 @@
-# init, code exapmle
-## html
+# code exapmles
+## standart init
 ```
-<a href="link" rel="lightbox">
-	any content
+<a href="link-to-image" rel="lightbox">
+  any content
 </a>
 ```
-where: link - link to photo
-
-## jquery
 ```
 $(document).ready(function($){
   $('a[rel*="lightbox"]').lightbox();
 });
 ```
 
-# group photos
+## init group photos
 Use attr
 
 ```
-rel="lightbox[roadtrip]"
+rel="lightbox[id]"
 ```
+where: id - unique id groups images
 
-# notice
-Based on Wp Lightbox 2 wordpress plugin 
+## init lightbox with scroll
+Created specifically for long images layouts. Just add a class to link:
+
+```
+lightbox-with-scroll
+```
