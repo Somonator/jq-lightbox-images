@@ -1,20 +1,144 @@
-<link rel="stylesheet" href="lightbox.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>lightbox demo</title>
 
-<a href="https://24tv.ua/resources/photos/news/720x874_DIR/201905/1157621_8051453.jpg?201905112442" rel="lightbox">
-	<img src="https://24tv.ua/resources/photos/news/720x874_DIR/201905/1157621_8051453.jpg?201905112442" width="100" alt="">
-</a>
+	<link rel="stylesheet" href="lightbox.css">
+</head>
+<body>
+	<div class="container">
+		<div class="masonry">
+			<div class="title">Lightbox demo | Single</div>
 
-<a href="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051459.jpg?201905112442" rel="lightbox[roadtrip]">
-	<img src="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051459.jpg?201905112442" width="100" alt="">
-</a>
+			<a href="/img/s1.jpg" rel="lightbox">
+				<img src="/img/s1.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/s2.jpg" rel="lightbox">
+				<img src="/img/s2.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/s3.jpg" rel="lightbox">
+				<img src="/img/s3.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/s4.jpg" rel="lightbox">
+				<img src="/img/s4.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/s5.jpg" rel="lightbox">
+				<img src="/img/s5.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/s6.jpg" rel="lightbox">
+				<img src="/img/s6.jpg" width="100" alt="">
+			</a>	
+		</div>
 
-<a href="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051462.jpg?201905112442" rel="lightbox[roadtrip]">
-	<img src="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051462.jpg?201905112442" width="100" alt="">
-</a>
+		<div class="masonry">
+			<div class="title">Kyiv</div>
 
-<a href="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051467.jpg?201905112442" rel="lightbox">
-	<img src="https://24tv.ua/resources/photos/news/720x900_DIR/201905/1157621_8051467.jpg?201905112442" width="100" alt="">
-</a>
+			<a href="/img/k1.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k1.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/k2.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k2.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/k3.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k3.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/k4.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k4.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/k5.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k5.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/k6.jpg" rel="lightbox[kyiv]">
+				<img src="/img/k6.jpg" width="100" alt="">
+			</a>	
+		</div>
+		
+		<div class="masonry">
+			<div class="title">Anime</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="lightbox.js"></script>
+			<a href="/img/a1.jpg" rel="lightbox[anime]">
+				<img src="/img/a1.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/a2.jpg" rel="lightbox[anime]">
+				<img src="/img/a2.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/a3.jpg" rel="lightbox[anime]">
+				<img src="/img/a3.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/a4.jpg" rel="lightbox[anime]">
+				<img src="/img/a4.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/a5.jpg" rel="lightbox[anime]">
+				<img src="/img/a5.jpg" width="100" alt="">
+			</a>
+		
+			<a href="/img/a6.jpg" rel="lightbox[anime]">
+				<img src="/img/a6.jpg" width="100" alt="">
+			</a>	
+		</div>		
+	</div>
+	
+	<style>
+	body {
+		background-color: #f6f6f6;
+		margin: 0;
+	}
+	.container {
+		width: 100%;
+		max-width: 1200px;
+		padding: 0 20px;
+		margin: 0 auto;				
+	}
+	.masonry {
+		display: flex;
+		gap: 20px;
+		flex-wrap: wrap;
+		margin-bottom: 50px;
+	}
+	.masonry .title {
+		font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;		
+		font-size: 40px;
+		font-weight: 600;
+		color: #444;
+		flex-basis: 100%;
+		margin: 0;
+	}
+	.masonry a {
+		display: flex;
+		align-items: center;
+		flex: 1 1 30%;
+	}
+	.masonry a img {
+		border-radius: 5px;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	</style>
+
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="lightbox.js"></script>
+	<script>
+	$(document).ready(function($){
+		$('a[rel*="lightbox"]').lightbox();
+	});
+	</script>
+</body>
+</html>

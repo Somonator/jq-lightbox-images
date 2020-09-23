@@ -1,141 +1,134 @@
 (function($){
 	$.fn.lightbox = function() {
 		let $all_this = $(this),
-				$tpl = $(`
-				<div class="lightbox" style="display: none;">
-					<div class="img-box"></div>
-					<div class="prev" style="display: none;">&larr;</div>
-					<div class="next">&rarr;</div>	
-					<div class="close">&#9747;</div>	
-				</div>
-				`),
-				$lightbox,
-				$prev,
-				$next,
-				$close,
+			$tpl = $(`
+			<div class="lightbox" style="display: none;">
+				<div class="img-box"></div>
+				<div class="prev" style="display: none;">&larr;</div>
+				<div class="next">&rarr;</div>	
+				<div class="close">&#9747;</div>	
+			</div>
+			<div class="lightbox-overlay" style="display: none;"></div>
+			`),
+			$lightbox,
+			$prev,
+			$next,
+			$close,
+			$overlay,
 
-				image_now,				
-				images_roadtrip = [],
-				index_roadtrip = 0,				
-				images_roadtrip_number = 0,			
-				is_roadtrip_image = false,
+			image_now,				
+			images_group = [],
+			index_group_now = 0,				
+			images_group_number = 0,			
+			is_group_image = false,
 
-				setTemplate = function() {
-					if (!$('.lightbox').length > 0) {
-						$('body').append($tpl);
-					}
+			setTemplate = function() {
+				if (!$('.lightbox').length > 0) {
+					$('body').append($tpl);
+				}
 
-					return $tpl;
-				},
-				getImagesRoadtrip = function() {
-					let images_roadtrip;
+				return $tpl;
+			},
+			getImagesGroup = function(rel_value) {
+				return $all_this.filter('[rel*="' + rel_value + '"]');
+			},
+			getGroupImage = function(i) {
+				return $(images_group[i]);
+			},
+			checkGroup = function(image_now) {
+				if (image_now.attr('rel').match(/\[(.*?)\]/)) {
+					is_group_image = true;								
+					images_group = getImagesGroup(image_now.attr('rel'));
+					index_group_now = images_group.index(image_now);				
+					images_group_number = images_group.length - 1;		
+				} else {
+					is_group_image = false;
+				}
+			},
+			checkFull = function() {
+				let img = is_group_image ? getGroupImage(index_group_now) : image_now;
 
-					images_roadtrip = $all_this.filter('[rel*="[roadtrip]"]');
+				img.hasClass('lightbox-with-scroll') ? $lightbox.addClass('full-with-scroll') : $lightbox.removeClass('full-with-scroll');
+			},
+			openLightbox = function(event) {
+				event.preventDefault();
+				
+				image_now = $(this);
 
-					return images_roadtrip;
-				},
-				getImageRoadtrip = function(i) {
-					return images_roadtrip[i];
-				},
-				openLightbox = function(event) {
-					event.preventDefault();
-					
-					image_now = $(this);
-					is_roadtrip_image = image_now.attr('rel').indexOf('[roadtrip]') != -1;
-					index_roadtrip = is_roadtrip_image ? images_roadtrip.filter(image_now).index() - 1 : null;
+				checkGroup(image_now);
+				checkFull();				
+				setImage();
+				manageNav();
 
-					setImage();
-					manageNav();
-					isFull();
+				$lightbox.fadeIn(200);
+				$overlay.fadeIn(100);				
+				$('body').addClass('lightbox-overflow-hidden');
+			},				
+			setImage = function() {
+				let img = is_group_image ? getGroupImage(index_group_now) : image_now;
 
-					$lightbox.hide();
-					$lightbox.fadeIn('slow');
-					$('body').addClass('lightbox-overlay');
-				},				
-				setImage = function() {
-					let img = is_roadtrip_image ? getImageRoadtrip(index_roadtrip) : image_now.attr('href'), timer_loading_show;
+				$lightbox.find('img').remove();
+				$lightbox.find('.img-box').append('<img src="' + img.attr('href') + '" alt="">');
+				$lightbox.append('<div class="load">loading...</div>');
+				$lightbox.find('img').on('load', function() {
+					$lightbox.find('.load').remove();
+				});
+			},
+			manageNav = function() {
+				if (is_group_image) {
+					index_group_now == 0 ? $prev.hide() : $prev.show();
+					index_group_now == images_group_number ? $next.hide() : $next.show();						
+				} else {
+					$prev.hide();
+					$next.hide();					
+				}
+			},						
+			prevImage = function(event) {
+				event.preventDefault();
 
-					$lightbox.find('img').remove();
-					$lightbox.find('.img-box').append('<img src="' + img + '" alt="">');
-					
-					timer_loading_show = setTimeout(function() {
-						$lightbox.find('img').hide();
-						$lightbox.append('<div class="load">loading</div>');
-						$lightbox.addClass('loading');
-					}, 2000);
+				index_group_now == 0 ? null : index_group_now--;
 
-					$lightbox.find('img').on('load', function() {
-						$lightbox.find('.load').remove();
-						$lightbox.removeClass('loading');
-						$(this).show();
+				setImage();
+				manageNav();
+				checkFull();
 
-						clearTimeout(timer_loading_show);
-					});
-				},				
-				manageNav = function() {
-					if (is_roadtrip_image) {
-						index_roadtrip == 0 ? $prev.hide() : $prev.show();
-						index_roadtrip == images_roadtrip_number ? $next.hide() : $next.show();						
-					} else {
-						$prev.hide();
-						$next.hide();					
-					}
-				},
-				isFull = function() {
-					let elem = is_roadtrip_image ? $all_this.closest('[href^="' + images_roadtrip[index_roadtrip] + '"]') : image_now;
+				$lightbox.hide();
+				$lightbox.fadeIn('slow');
+			},
+			nextImage = function(event) {
+				event.preventDefault();
 
-					elem.hasClass('full') ? $lightbox.addClass('wow') : $lightbox.removeClass('wow');
-				},				
-				prevImage = function(event) {
-					event.preventDefault();
+				index_group_now == images_group_number ? null : index_group_now++;
 
-					index_roadtrip == 0 ? null : index_roadtrip--;
+				setImage();
+				manageNav();
+				checkFull();
 
-					setImage();
-					manageNav();
-					isFull();
+				$lightbox.hide();
+				$lightbox.fadeIn('slow');
+			},
+			closelightbox = function(event) {
+				event.preventDefault();
 
-					$lightbox.hide();
-					$lightbox.fadeIn('slow');
-				},
-				nextImage = function(event) {
-					event.preventDefault();
+				$lightbox.fadeOut(300);
+				$overlay.fadeOut(100);
+				$('body').removeClass('lightbox-overflow-hidden');
+			},
+			init = function() {
+				$lightbox = setTemplate();
+				$prev = $lightbox.find('.prev');
+				$next = $lightbox.find('.next');
+				$close = $lightbox.find('.close');
+				$overlay = $('.lightbox-overlay');
+				$lightbox.hide();
 
-					index_roadtrip == images_roadtrip_number ? null : index_roadtrip++ ;
-
-					setImage();
-					manageNav();
-					isFull();
-
-					$lightbox.hide();
-					$lightbox.fadeIn('slow');
-				},
-				closelightbox = function(event) {
-					event.preventDefault();
-
-					$lightbox.fadeOut('fast');
-					$('body').removeClass('lightbox-overlay');
-				},
-				init = function() {
-					$lightbox = setTemplate();
-					$prev = $lightbox.find('.prev');
-					$next = $lightbox.find('.next');
-					$close = $lightbox.find('.close');
-
-					images_roadtrip = getImagesRoadtrip();
-					images_roadtrip_number = images_roadtrip.length - 1;
-
-					$lightbox.hide();
-				};
+				$all_this.on('click', openLightbox);				
+				$prev.on('click', prevImage);
+				$next.on('click', nextImage);
+				$close.on('click', closelightbox);
+				$overlay.on('click', closelightbox);
+			};
 
 		init();
-		$all_this.on('click', openLightbox);
-		$prev.on('click', prevImage);
-		$next.on('click', nextImage);
-		$close.on('click', closelightbox);
 	};
-
-	$(document).ready(function($){
-		$('a[rel*="lightbox"]').lightbox();
-	});
 })(jQuery);
